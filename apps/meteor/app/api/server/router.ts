@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import type { Method } from '@rocket.chat/rest-typings';
 import type { AnySchema } from 'ajv';
 import express from 'express';
@@ -39,6 +40,17 @@ export type Route = {
 	}[];
 	tags?: string[];
 };
+declare module 'hono' {
+	interface ContextVariableMap {
+		route: string;
+	}
+}
+
+declare global {
+	interface Request {
+		route: string;
+	}
+}
 
 export class Router<
 	TBasePath extends string,
@@ -124,6 +136,7 @@ export class Router<
 			prev(router);
 			router[method.toLowerCase() as Lowercase<Method>](`/${subpath}`.replace('//', '/'), async (c) => {
 				const { req, res } = c;
+				req.raw.route = `${c.var.route ?? ''}${subpath}`;
 				if (options.query) {
 					const validatorFn = options.query;
 					if (typeof options.query === 'function' && !validatorFn(req.query)) {
@@ -271,7 +284,13 @@ export class Router<
 			const prev = this.middleware;
 			this.middleware = (router: Hono) => {
 				prev(router);
-				router.route(innerRouter.base, innerRouter.honoRouter);
+
+				router
+					.use(`${innerRouter.base}/*`, (c, next) => {
+						c.set('route', `${c.var.route || ''}${innerRouter.base}`);
+						return next();
+					})
+					.route(innerRouter.base, innerRouter.honoRouter);
 			};
 		}
 		if (typeof innerRouter === 'function') {
@@ -294,8 +313,17 @@ export class Router<
 		// eslint-disable-next-line new-cap
 		const router = express.Router();
 		const hono = new Hono();
-		hono.route(this.base, this.honoRouter);
-		router.use(this.base, honoAdapter(hono));
+		router.use(
+			this.base,
+			honoAdapter(
+				hono
+					.use(`${this.base}/*`, (c, next) => {
+						c.set('route', `${c.var.route || ''}${this.base}`);
+						return next();
+					})
+					.route(this.base, this.honoRouter),
+			),
+		);
 		return router;
 	}
 }
