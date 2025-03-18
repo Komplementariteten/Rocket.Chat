@@ -1,5 +1,6 @@
+import { startRestAPI } from './app/api/server/api';
 import { startLicense } from './ee/app/license/server/startup';
-import { registerEEBroker } from './ee/server';
+import { registerEEBroker, initializeAppsEngine } from './ee/server';
 import { startFederationService } from './ee/server/startup/services';
 
 const loadBeforeLicense = async () => {
@@ -16,4 +17,8 @@ export const startRocketChat = async () => {
 	await startLicense();
 
 	await loadAfterLicense();
+
+	await initializeAppsEngine();
+
+	await startRestAPI();
 };

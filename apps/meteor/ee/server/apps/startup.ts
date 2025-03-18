@@ -1,9 +1,7 @@
-import { Meteor } from 'meteor/meteor';
-
 import { Apps } from './orchestrator';
 import { settings, settingsRegistry } from '../../../app/settings/server';
 
-Meteor.startup(async function _appServerOrchestrator() {
+export async function initializeAppsEngine() {
 	await settingsRegistry.addGroup('General', async function () {
 		await this.section('Apps', async function () {
 			await this.add('Apps_Logs_TTL', '30_days', {
@@ -87,4 +85,4 @@ Meteor.startup(async function _appServerOrchestrator() {
 	Apps.initialize();
 
 	void Apps.load();
-});
+}
