@@ -1,4 +1,4 @@
-import { createAccountSettings } from './accounts';
+import { createAccountTotalSettings } from './accounts';
 import { createAnalyticsSettings } from './analytics';
 import { createAssetsSettings } from './assets';
 import { createBotsSettings } from './bots';
@@ -38,7 +38,7 @@ import { createWebDavSettings } from './webdav';
 import { createWebRTCSettings } from './webrtc';
 
 await Promise.all([
-	createAccountSettings(),
+	createAccountTotalSettings(),
 	createAnalyticsSettings(),
 	createAssetsSettings(),
 	createBotsSettings(),

@@ -16,7 +16,7 @@ type SecurityLogDisplayProps = {
 	onCancel: () => void;
 };
 
-export const SecurityLogDisplay = ({ timestamp, actor, setting, changedFrom, changedTo, onCancel }: SecurityLogDisplayProps) => {
+const SecurityLogDisplayModal = ({ timestamp, actor, setting, changedFrom, changedTo, onCancel }: SecurityLogDisplayProps) => {
 	const { t } = useTranslation();
 	const settingStructure = useSettingStructure(setting);
 	return (
@@ -48,3 +48,5 @@ export const SecurityLogDisplay = ({ timestamp, actor, setting, changedFrom, cha
 		</GenericModal>
 	);
 };
+
+export default SecurityLogDisplayModal;

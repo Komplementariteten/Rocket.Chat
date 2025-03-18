@@ -2,7 +2,7 @@ import { mockAppRoot } from '@rocket.chat/mock-providers';
 import { render, screen } from '@testing-library/react';
 import moment from 'moment';
 
-import { SecurityLogDisplay } from './SecurityLogDisplayModal';
+import SecurityLogDisplayModal from './SecurityLogDisplayModal';
 
 let type = 'string';
 
@@ -28,7 +28,7 @@ describe('SecurityLogDisplay', () => {
 		};
 
 		render(
-			<SecurityLogDisplay
+			<SecurityLogDisplayModal
 				timestamp={props.timestamp}
 				actor={props.actor}
 				setting={props.setting}
@@ -51,7 +51,7 @@ describe('SecurityLogDisplay', () => {
 		};
 
 		render(
-			<SecurityLogDisplay
+			<SecurityLogDisplayModal
 				timestamp={props.timestamp}
 				actor={props.actor}
 				setting={props.setting}
@@ -96,7 +96,7 @@ describe('SecurityLogDisplay', () => {
 		};
 
 		render(
-			<SecurityLogDisplay
+			<SecurityLogDisplayModal
 				timestamp={props.timestamp}
 				actor={props.actor}
 				setting={props.setting}

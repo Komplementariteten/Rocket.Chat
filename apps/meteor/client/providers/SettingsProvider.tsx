@@ -91,7 +91,7 @@ const SettingsProvider = ({ children, privileged = false }: SettingsProviderProp
 		[cachedCollection],
 	);
 
-	const countSettings = useMemo(() => () => cachedCollection.collection.find().count(), [cachedCollection]);
+	const countTotalSettings = useMemo(() => () => cachedCollection.collection.find().count(), [cachedCollection]);
 
 	const queryClient = useQueryClient();
 
@@ -116,10 +116,10 @@ const SettingsProvider = ({ children, privileged = false }: SettingsProviderProp
 			isLoading,
 			querySetting,
 			querySettings,
-			countSettings,
+			countTotalSettings,
 			dispatch,
 		}),
-		[hasPrivateAccess, isLoading, querySetting, querySettings, countSettings, dispatch],
+		[hasPrivateAccess, isLoading, querySetting, querySettings, countTotalSettings, dispatch],
 	);
 
 	return <SettingsContext.Provider children={children} value={contextValue} />;

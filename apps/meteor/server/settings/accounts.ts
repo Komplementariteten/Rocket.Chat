@@ -2,7 +2,7 @@ import { Random } from '@rocket.chat/random';
 
 import { settingsRegistry } from '../../app/settings/server';
 
-export const createAccountSettings = () =>
+export const createAccountTotalSettings = () =>
 	settingsRegistry.addGroup('Accounts', async function () {
 		await this.section('Two Factor Authentication', async function () {
 			const enable2FA = {

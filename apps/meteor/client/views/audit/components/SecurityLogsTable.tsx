@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useState, type ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { SecurityLogDisplay } from './SecurityLogDisplayModal';
+import SecurityLogDisplayModal from './SecurityLogDisplayModal';
 import { SettingSelect } from './SettingSelect';
 import DateRangePicker from './forms/DateRangePicker';
 import GenericNoResults from '../../../components/GenericNoResults';
@@ -40,10 +40,6 @@ const SecurityLogsTable = (): ReactElement => {
 	});
 
 	const { current, itemsPerPage, setItemsPerPage: onSetItemsPerPage, setCurrent: onSetCurrent, ...paginationProps } = usePagination();
-
-	// const handleExportJson = () => {
-	// 	return undefined;
-	// };
 
 	const handleClearFilters = () => {
 		setSetting('');
@@ -80,7 +76,7 @@ const SecurityLogsTable = (): ReactElement => {
 		changedTo: string;
 	}) => {
 		setModal(
-			<SecurityLogDisplay
+			<SecurityLogDisplayModal
 				timestamp={timestamp}
 				actor={actor}
 				setting={String(setting)}
@@ -128,9 +124,6 @@ const SecurityLogsTable = (): ReactElement => {
 				</Field>
 				<ButtonGroup>
 					<Margins inline={6}>
-						{/* <Button secondary onClick={handleExportJson}>
-							{t('Export_JSON')}
-						</Button> */}
 						<Button secondary onClick={handleClearFilters}>
 							{t('Clear_filters')}
 						</Button>

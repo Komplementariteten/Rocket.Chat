@@ -60,7 +60,7 @@ export default {
 						}),
 					],
 					querySettings: () => [() => () => undefined, () => []],
-					countSettings: () => 0,
+					countTotalSettings: () => 0,
 					dispatch: async () => undefined,
 				}}
 			>
