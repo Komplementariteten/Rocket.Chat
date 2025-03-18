@@ -6565,6 +6565,7 @@
   "Disconnect_workspace": "Disconnect workspace",
   "Awaiting_confirmation": "Awaiting confirmation",
   "Security_code": "Security code",
+  "Security_logs": "Security logs",
   "Registration_Token": "Registration Token",
   "RegisterWorkspace_Button": "Register workspace",
   "ConnectWorkspace_Button": "Connect workspace",
