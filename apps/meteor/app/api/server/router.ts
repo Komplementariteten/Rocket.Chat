@@ -159,6 +159,12 @@ export class Router<
 					}
 				}
 
+				let bodyParams = {};
+				try {
+					bodyParams = await (req.header('content-type')?.includes('application/json') ? c.req.json() : req.text());
+					// eslint-disable-next-line no-empty
+				} catch {}
+
 				const {
 					body,
 					statusCode = 200,
@@ -167,7 +173,7 @@ export class Router<
 					{
 						urlParams: req.param(),
 						queryParams: req.query(),
-						bodyParams: await (req.header('content-type')?.includes('application/json') ? c.req.json() : req.text()),
+						bodyParams,
 						request: req.raw,
 						response: res,
 					} as any,
