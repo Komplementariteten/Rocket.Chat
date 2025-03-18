@@ -1,10 +1,10 @@
 import type { Meta, StoryFn } from '@storybook/react';
 
-import { SecurityLogDisplay } from './SecurityLogDisplayModal';
+import SecurityLogDisplayModal from './SecurityLogDisplayModal';
 
 export default {
 	title: 'Components/Audit/Modal/SecurityLogDisplay',
-	component: SecurityLogDisplay,
+	component: SecurityLogDisplayModal,
 	args: {
 		timestamp: '2021-10-01T00:00:00.000Z',
 		actor: 'John Doe',
@@ -12,6 +12,6 @@ export default {
 		changedFrom: 'false',
 		changedTo: 'true',
 	},
-} satisfies Meta<typeof SecurityLogDisplay>;
+} satisfies Meta<typeof SecurityLogDisplayModal>;
 
-export const Default: StoryFn<typeof SecurityLogDisplay> = (args) => <SecurityLogDisplay {...args} />;
+export const Default: StoryFn<typeof SecurityLogDisplayModal> = (args) => <SecurityLogDisplayModal {...args} />;
