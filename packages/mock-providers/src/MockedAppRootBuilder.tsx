@@ -12,7 +12,7 @@ import type { ServerMethodName, ServerMethodParameters, ServerMethodReturn } fro
 import { Emitter } from '@rocket.chat/emitter';
 import languages from '@rocket.chat/i18n/dist/languages';
 import type { Method, OperationParams, OperationResult, PathPattern, UrlParams } from '@rocket.chat/rest-typings';
-import type { Device, ModalContextValue, SubscriptionWithRoom, TranslationKey } from '@rocket.chat/ui-contexts';
+import type { Device, ModalContextValue, SettingsContextQuery, SubscriptionWithRoom, TranslationKey } from '@rocket.chat/ui-contexts';
 import {
 	AuthorizationContext,
 	ConnectionStatusContext,
@@ -386,6 +386,24 @@ export class MockedAppRootBuilder {
 		};
 
 		this.settings.querySetting = outerFn;
+
+		return this;
+	}
+
+	withSettings(settings: { _id: string; value: SettingValue }[]): this {
+		const innerFn = this.settings.querySettings;
+
+		const outerFn = (
+			query: SettingsContextQuery,
+		): [subscribe: (onStoreChange: () => void) => () => void, getSnapshot: () => ISetting[]] => {
+			if (settings.length) {
+				return [() => () => undefined, () => settings as unknown as ISetting[]];
+			}
+
+			return innerFn(query);
+		};
+
+		this.settings.querySettings = outerFn;
 
 		return this;
 	}
