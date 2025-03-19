@@ -1,6 +1,5 @@
-import { Box, CodeSnippet } from '@rocket.chat/fuselage';
+import { Box } from '@rocket.chat/fuselage';
 import { UserAvatar } from '@rocket.chat/ui-avatar';
-import { useSettingStructure } from '@rocket.chat/ui-contexts';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 
@@ -18,7 +17,7 @@ type SecurityLogDisplayProps = {
 
 const SecurityLogDisplayModal = ({ timestamp, actor, setting, changedFrom, changedTo, onCancel }: SecurityLogDisplayProps) => {
 	const { t } = useTranslation();
-	const settingStructure = useSettingStructure(setting);
+
 	return (
 		<GenericModal icon={null} onClose={onCancel} title={t('Setting_change')}>
 			<InfoPanelLabel>{t('Timestamp')}</InfoPanelLabel>
@@ -41,10 +40,10 @@ const SecurityLogDisplayModal = ({ timestamp, actor, setting, changedFrom, chang
 			<InfoPanelText>{t(setting)}</InfoPanelText>
 
 			<InfoPanelLabel>{t('Changed_from')}</InfoPanelLabel>
-			{settingStructure?.type === 'code' ? <CodeSnippet>{changedFrom}</CodeSnippet> : <InfoPanelText>{changedFrom}</InfoPanelText>}
+			<InfoPanelText>{changedFrom}</InfoPanelText>
 
 			<InfoPanelLabel>{t('Changed_to')}</InfoPanelLabel>
-			{settingStructure?.type === 'code' ? <CodeSnippet>{changedTo}</CodeSnippet> : <InfoPanelText>{changedTo}</InfoPanelText>}
+			<InfoPanelText>{changedTo}</InfoPanelText>
 		</GenericModal>
 	);
 };
