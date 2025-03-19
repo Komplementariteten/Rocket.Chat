@@ -2,4 +2,4 @@
 "@rocket.chat/meteor": patch
 ---
 
-Check the license max users limit before inserting new users from LDAP
+Ensures seat limit validation in LDAP sync, preventing activations beyond license restrictions.
