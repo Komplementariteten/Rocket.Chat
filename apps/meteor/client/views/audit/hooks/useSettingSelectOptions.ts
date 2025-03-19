@@ -5,15 +5,13 @@ import { useScrollableRecordList } from '../../../hooks/lists/useScrollableRecor
 import { RecordList } from '../../../lib/lists/RecordList';
 
 export const useSettingSelectOptions = (filter = '') => {
-	const [skip, setSkip] = useState(0);
-	const [limit, setLimit] = useState(25);
 	const query = useMemo(
 		() => ({
 			...(filter && { _id: new RegExp(filter, 'i') }),
-			skip,
-			limit,
+			skip: 0,
+			limit: 25,
 		}),
-		[filter, limit, skip],
+		[filter],
 	);
 
 	const settings = useSettings(query);
@@ -28,15 +26,15 @@ export const useSettingSelectOptions = (filter = '') => {
 
 	const fetchData = useCallback(
 		async (start: number, end: number) => {
-			setSkip(start);
-			setLimit(start + end);
+			query.skip = start;
+			query.limit = start + end;
 
 			return {
 				items: settings.map(({ _id }) => ({ label: _id, value: _id, _id })),
 				itemCount: totalSettings,
 			};
 		},
-		[settings, totalSettings],
+		[query, settings, totalSettings],
 	);
 
 	const { loadMoreItems, initialItemCount } = useScrollableRecordList(itemsList, fetchData, 25);
