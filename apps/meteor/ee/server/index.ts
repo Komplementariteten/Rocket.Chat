@@ -14,5 +14,5 @@ import './local-services/ldap/service';
 import './methods/getReadReceipts';
 import './patches';
 
-export { initializeAppsEngine } from './apps/startup';
+export * from './apps/startup';
 export { registerEEBroker } from './startup';

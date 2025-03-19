@@ -107,6 +107,9 @@ export type Options = (
 			queryFields?: string[];
 	  }
 ) & {
+	/**
+	 * @deprecated The `validateParams` option is deprecated. Use `query` and/OR `body` instead.
+	 */
 	validateParams?: ValidateFunction | { [key in Method]?: ValidateFunction };
 	authOrAnonRequired?: true;
 	deprecation?: {
@@ -163,6 +166,14 @@ type ActionThis<TMethod extends Method, TPathPattern extends PathPattern, TOptio
 		 */
 		query: Record<string, unknown>;
 	}>;
+
+	readonly connection: {
+		token: string;
+		id: string;
+		close: () => void;
+		clientAddress: string;
+		httpHeaders: Record<string, any>;
+	};
 } & (TOptions extends { authRequired: true }
 	? {
 			user: IUser;
