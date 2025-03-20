@@ -50,8 +50,7 @@ export const cors =
 
 		// if invalid origin reply without required CORS headers
 		if (!originHeader || !origins.includes(originHeader)) {
-			c.body('Invalid origin', 403);
-			return;
+			return c.body('Invalid origin', 403);
 		}
 
 		res.headers.set('Vary', 'Origin');
