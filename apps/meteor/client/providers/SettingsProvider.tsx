@@ -96,7 +96,7 @@ const SettingsProvider = ({ children }: SettingsProviderProps) => {
 			countTotalSettings,
 			dispatch,
 		}),
-		[hasPrivateAccess, isLoading, querySetting, querySettings, countTotalSettings, dispatch],
+		[canManageSettings, querySetting, querySettings, countTotalSettings, dispatch],
 	);
 
 	return <SettingsContext.Provider children={children} value={contextValue} />;

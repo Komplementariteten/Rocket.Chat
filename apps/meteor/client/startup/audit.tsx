@@ -67,7 +67,7 @@ onToggledFeature('auditing', {
 				path: '/security-logs',
 				id: 'security-logs',
 				element: appLayout.wrap(
-					<SettingsProvider privileged>
+					<SettingsProvider>
 						<MainLayout>
 							<PermissionGuard permission='can-audit-log'>
 								<SecurityLogsPage />
