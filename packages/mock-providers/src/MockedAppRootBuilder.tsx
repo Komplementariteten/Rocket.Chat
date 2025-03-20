@@ -41,13 +41,6 @@ type Mutable<T> = {
 	-readonly [P in keyof T]: T[P];
 };
 
-export type SettingsContextQuery = {
-	readonly _id?: ISetting['_id'][] | RegExp;
-	readonly group?: ISetting['_id'];
-	readonly section?: string;
-	readonly tab?: ISetting['_id'];
-};
-
 // eslint-disable-next-line @typescript-eslint/naming-convention
 interface MockedAppRootEvents {
 	'update-modal': void;
