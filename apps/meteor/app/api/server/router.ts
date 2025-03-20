@@ -2,7 +2,7 @@
 import type { Method } from '@rocket.chat/rest-typings';
 import type { AnySchema } from 'ajv';
 import express from 'express';
-import type { MiddlewareHandler } from 'hono';
+import type { HonoRequest, MiddlewareHandler } from 'hono';
 import { Hono } from 'hono';
 
 import type { TypedAction, TypedOptions } from './definition';
@@ -42,7 +42,8 @@ export type Route = {
 };
 declare module 'hono' {
 	interface ContextVariableMap {
-		route: string;
+		'route': string;
+		'bodyParams-override'?: Record<string, any>;
 	}
 }
 
@@ -118,6 +119,45 @@ export class Router<
 		};
 	}
 
+	private async parseBodyParams(request: HonoRequest, overrideBodyParams: Record<string, any> = {}) {
+		try {
+			const parsedBody = await (request.header('content-type')?.includes('application/json')
+				? request.raw.clone().json()
+				: request.raw.clone().text());
+			// This is necessary to keep the compatibility with the previous version, otherwise the bodyParams will be an empty string when no content-type is sent
+			if (parsedBody === '') {
+				return { ...overrideBodyParams };
+			}
+
+			if (Array.isArray(parsedBody)) {
+				return parsedBody;
+			}
+
+			return { ...parsedBody, ...overrideBodyParams };
+			// eslint-disable-next-line no-empty
+		} catch {}
+
+		return { ...overrideBodyParams };
+	}
+
+	private parseQueryParams(request: HonoRequest) {
+		const removeArraySuffixFromKey = (key: string) => key.replaceAll('[]', '');
+
+		const queryParams = {
+			...Object.keys(request.query())
+				.filter((key) => key.endsWith('[]'))
+				.reduce(
+					(acc, key) => {
+						acc[removeArraySuffixFromKey(key)] = request.queries(key);
+						return acc;
+					},
+					{} as Record<string, any>,
+				),
+			...Object.fromEntries(Object.entries(request.query()).filter(([key]) => !key.endsWith('[]'))),
+		};
+		return queryParams;
+	}
+
 	private method<TSubPathPattern extends string, TOptions extends TypedOptions, TPathPattern extends `${TBasePath}/${TSubPathPattern}`>(
 		method: Method,
 		subpath: TSubPathPattern,
@@ -139,7 +179,7 @@ export class Router<
 				req.raw.route = `${c.var.route ?? ''}${subpath}`;
 				if (options.query) {
 					const validatorFn = options.query;
-					if (typeof options.query === 'function' && !validatorFn(req.query)) {
+					if (typeof options.query === 'function' && !validatorFn(req.query())) {
 						return c.json(
 							{
 								success: false,
@@ -151,13 +191,7 @@ export class Router<
 					}
 				}
 
-				let bodyParams = {};
-				try {
-					bodyParams = await (req.header('content-type')?.includes('application/json')
-						? c.req.raw.clone().json()
-						: c.req.raw.clone().text());
-					// eslint-disable-next-line no-empty
-				} catch {}
+				const bodyParams = await this.parseBodyParams(req, c.var['bodyParams-override']);
 
 				if (options.body) {
 					const validatorFn = options.body;
@@ -180,7 +214,7 @@ export class Router<
 				} = await action.apply(
 					{
 						urlParams: req.param(),
-						queryParams: req.query(),
+						queryParams: this.parseQueryParams(req),
 						bodyParams,
 						request: req.raw.clone(),
 						response: res,

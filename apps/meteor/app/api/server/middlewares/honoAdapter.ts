@@ -8,11 +8,12 @@ export const honoAdapter = (hono: Hono) => async (expressReq: Request, res: Resp
 
 	const honoRes = await hono.request(expressReq.originalUrl, {
 		...req,
-		...(['POST', 'PUT'].includes(expressReq.method) && { body: expressReq as unknown as ReadableStream }),
+		...(['POST', 'PUT', 'DELETE'].includes(expressReq.method) && { body: expressReq as unknown as ReadableStream }),
 		headers: new Headers(Object.fromEntries(Object.entries(expressReq.headers)) as Record<string, string>),
 	});
-
 	res.status(honoRes.status);
 	honoRes.headers.forEach((value, key) => res.setHeader(key, value));
-	res.send(await honoRes.text());
+	// Converting it to a Buffer because res.send appends always a charset to the Content-Type
+	// https://github.com/expressjs/express/issues/2238
+	res.send(Buffer.from(await honoRes.text()));
 };
