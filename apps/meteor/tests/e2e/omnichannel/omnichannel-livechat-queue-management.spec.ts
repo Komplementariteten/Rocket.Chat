@@ -134,7 +134,7 @@ test.describe('OC - Contact Manager Routing', () => {
 
 	test.beforeAll(async ({ api, browser }) => {
 		await api.post('/livechat/users/agent', { username: 'user2' });
-		await api.post('/settings/Livechat_Routing_Method', { value: 'Manual_Selection' });
+		await setSettingValueById(api, 'Livechat_Routing_Method', 'Manual_Selection');
 		await api.post('/omnichannel/contact', {
 			_id: contactId,
 			name: visitorWithManager.name,
@@ -161,7 +161,7 @@ test.describe('OC - Contact Manager Routing', () => {
 
 	test.afterAll(async ({ api }) => {
 		await Promise.all([
-			api.post('/settings/Livechat_Routing_Method', { value: 'Auto_Selection' }),
+			setSettingValueById(api, 'Livechat_Routing_Method', 'Auto_Selection'),
 			api.delete('/livechat/users/agent/user1'),
 			api.delete('/livechat/users/agent/user2'),
 			api.delete(`/omnichannel/contact/${contactId}`),

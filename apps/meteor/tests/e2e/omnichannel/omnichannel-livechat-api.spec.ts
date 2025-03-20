@@ -234,7 +234,7 @@ test.describe('OC - Livechat API', () => {
 			await addAgentToDepartment(api, { department: departmentA, agentId: agent.data._id });
 			await addAgentToDepartment(api, { department: departmentB, agentId: agent2.data._id });
 			await setSettingValueById(api, 'Livechat_offline_email', 'test@testing.com');
-			await setSettingValueById(api, 'Livechat_enabled_when_agent_idle', true);
+			await setSettingValueById(api, 'Livechat_enabled_when_agent_idle', false);
 		});
 
 		test.beforeEach(async ({ browser }, testInfo) => {
@@ -725,7 +725,7 @@ test.describe('OC - Livechat API', () => {
 
 		test.afterAll(async ({ api }) => {
 			await agent.delete();
-			await api.post('/settings/Livechat_enabled_when_agent_idle', { value: true });
+			await setSettingValueById(api, 'Livechat_enabled_when_agent_idle', true);
 		});
 
 		test('OC - Livechat API - onChatMaximized & onChatMinimized', async () => {
