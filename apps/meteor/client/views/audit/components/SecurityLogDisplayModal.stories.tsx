@@ -3,7 +3,7 @@ import type { Meta, StoryFn } from '@storybook/react';
 import SecurityLogDisplayModal from './SecurityLogDisplayModal';
 
 export default {
-	title: 'Components/Audit/Modal/SecurityLogDisplay',
+	title: 'views/Audit/SecurityLogDisplay',
 	component: SecurityLogDisplayModal,
 	args: {
 		timestamp: '2021-10-01T00:00:00.000Z',
