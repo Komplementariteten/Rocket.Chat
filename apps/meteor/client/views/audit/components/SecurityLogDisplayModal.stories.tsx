@@ -6,7 +6,7 @@ export default {
 	title: 'views/Audit/SecurityLogDisplay',
 	component: SecurityLogDisplayModal,
 	args: {
-		timestamp: 'Thursday, 20-Mar-25 17:17:46 UTC',
+		timestamp: 'Thursday, 20-Mar-25 17:17:46',
 		actor: 'John Doe',
 		setting: 'Show_message_in_email_notification',
 		changedFrom: 'false',
