@@ -320,15 +320,15 @@ const middleware = async (c, next) => {
 		return next();
 	}
 
-	const body = await req.raw.clone().json();
-	const payloadKeys = Object.keys(body);
-	if (payloadKeys.length !== 1) {
-		return next();
-	}
-
 	try {
+		const body = await req.raw.clone().json();
+		if (!req.body || typeof req.body !== 'object' || !('payload' in req.body) || Object.keys(req.body).length !== 1) {
+			return next();
+		}
+
 		// need to compose the full payload in this weird way because body-parser thought it was a form
-		c.set('bodyParams-override', JSON.parse(payloadKeys[0] + body[payloadKeys[0]]));
+		c.set('bodyParams-override', JSON.parse(req.body.payload));
+
 		return next();
 	} catch (e) {
 		c.body(JSON.stringify({ success: false, error: e.message }), 400);
@@ -336,7 +336,27 @@ const middleware = async (c, next) => {
 };
 
 // middleware for special requests that are urlencoded but have a json payload (like GitHub webhooks)
-Api.router.use(middleware);
+Api.router.use((req, res, next) => {
+	if (req.headers['content-type'] !== 'application/x-www-form-urlencoded') {
+		return next();
+	}
+
+	// make sure body has only one key and it is 'payload'
+	if (!req.body || typeof req.body !== 'object' || !('payload' in req.body) || Object.keys(req.body).length !== 1) {
+		return next();
+	}
+
+	try {
+		req.bodyParams = JSON.parse(req.body.payload);
+
+		return next();
+	} catch (e) {
+		res.writeHead(400);
+		res.end(JSON.stringify({ success: false, error: e.message }));
+	}
+
+	return next();
+});
 
 Api.addRoute(
 	':integrationId/:userId/:token',
