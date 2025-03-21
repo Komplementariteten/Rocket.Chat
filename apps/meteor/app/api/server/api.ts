@@ -33,6 +33,8 @@ import type {
 	TypedAction,
 	TypedOptions,
 	UnauthorizedResult,
+	RedirectStatusCodes,
+	RedirectResult,
 } from './definition';
 import { getUserInfo } from './helpers/getUserInfo';
 import { parseJsonQuery } from './helpers/parseJsonQuery';
@@ -271,6 +273,13 @@ export class APIClass<
 		} as SuccessResult<T>;
 
 		return finalResult as SuccessResult<T>;
+	}
+
+	public redirect<T, C extends RedirectStatusCodes>(code: C, result: T): RedirectResult<T, C> {
+		return {
+			statusCode: code,
+			body: result,
+		};
 	}
 
 	public failure<T>(result?: T): FailureResult<T>;
