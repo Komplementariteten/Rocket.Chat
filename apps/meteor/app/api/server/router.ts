@@ -60,7 +60,13 @@ export class Router<
 		[x: string]: unknown;
 	} = NonNullable<unknown>,
 > {
-	private middleware: (router: Hono) => void = () => void 0;
+	private middleware: (
+		router: Hono<{
+			Variables: {
+				remoteAddress: string;
+			};
+		}>,
+	) => void = () => void 0;
 
 	constructor(readonly base: TBasePath) {}
 
@@ -166,7 +172,13 @@ export class Router<
 		  } & Omit<TOptions, 'response'>)
 	> {
 		const prev = this.middleware;
-		this.middleware = (router: Hono) => {
+		this.middleware = (
+			router: Hono<{
+				Variables: {
+					remoteAddress: string;
+				};
+			}>,
+		) => {
 			prev(router);
 			router[method.toLowerCase() as Lowercase<Method>](`/${subpath}`.replace('//', '/'), async (c) => {
 				const { req, res } = c;
@@ -207,6 +219,7 @@ export class Router<
 					headers = {},
 				} = await action.apply(
 					{
+						requestIp: c.get('remoteAddress'),
 						urlParams: req.param(),
 						queryParams: this.parseQueryParams(req),
 						bodyParams,
@@ -324,7 +337,13 @@ export class Router<
 			};
 
 			const prev = this.middleware;
-			this.middleware = (router: Hono) => {
+			this.middleware = (
+				router: Hono<{
+					Variables: {
+						remoteAddress: string;
+					};
+				}>,
+			) => {
 				prev(router);
 
 				router
@@ -337,7 +356,13 @@ export class Router<
 		}
 		if (typeof innerRouter === 'function') {
 			const prev = this.middleware;
-			this.middleware = (router: Hono) => {
+			this.middleware = (
+				router: Hono<{
+					Variables: {
+						remoteAddress: string;
+					};
+				}>,
+			) => {
 				prev(router);
 				router.use(innerRouter as any);
 			};
@@ -345,8 +370,16 @@ export class Router<
 		return this as any;
 	}
 
-	get honoRouter(): Hono {
-		const router = new Hono();
+	get honoRouter(): Hono<{
+		Variables: {
+			remoteAddress: string;
+		};
+	}> {
+		const router = new Hono<{
+			Variables: {
+				remoteAddress: string;
+			};
+		}>();
 		this.middleware(router);
 		return router;
 	}
