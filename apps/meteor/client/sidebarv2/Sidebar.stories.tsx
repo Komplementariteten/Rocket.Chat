@@ -33,7 +33,6 @@ const settingContextValue: ContextType<typeof SettingsContext> = {
 	hasPrivateAccess: true,
 	querySetting: (_id) => [() => () => undefined, () => settings[_id]],
 	querySettings: () => [() => () => undefined, () => []],
-	countTotalSettings: () => Object.keys(settings).length,
 	dispatch: async () => undefined,
 };
 

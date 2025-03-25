@@ -69,8 +69,6 @@ const SettingsProvider = ({ children }: SettingsProviderProps) => {
 		[cachedCollection],
 	);
 
-	const countTotalSettings = useMemo(() => () => cachedCollection.collection.find().count(), [cachedCollection]);
-
 	const queryClient = useQueryClient();
 
 	const saveSettings = useMethod('saveSettings');
@@ -93,10 +91,9 @@ const SettingsProvider = ({ children }: SettingsProviderProps) => {
 			hasPrivateAccess: canManageSettings,
 			querySetting,
 			querySettings,
-			countTotalSettings,
 			dispatch,
 		}),
-		[canManageSettings, querySetting, querySettings, countTotalSettings, dispatch],
+		[canManageSettings, querySetting, querySettings, dispatch],
 	);
 
 	return <SettingsContext.Provider children={children} value={contextValue} />;

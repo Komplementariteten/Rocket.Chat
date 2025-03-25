@@ -18,7 +18,6 @@ export type SettingsContextValue = {
 	readonly querySettings: (
 		query: SettingsContextQuery,
 	) => [subscribe: (onStoreChange: () => void) => () => void, getSnapshot: () => ISetting[]];
-	readonly countTotalSettings: () => number;
 	readonly dispatch: (changes: Partial<ISetting>[]) => Promise<void>;
 };
 
@@ -26,6 +25,5 @@ export const SettingsContext = createContext<SettingsContextValue>({
 	hasPrivateAccess: false,
 	querySetting: () => [(): (() => void) => (): void => undefined, (): undefined => undefined],
 	querySettings: () => [(): (() => void) => (): void => undefined, (): ISetting[] => []],
-	countTotalSettings: () => 0,
 	dispatch: async () => undefined,
 });
