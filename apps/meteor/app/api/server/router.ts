@@ -183,6 +183,7 @@ export class Router<
 			router[method.toLowerCase() as Lowercase<Method>](`/${subpath}`.replace('//', '/'), async (c) => {
 				const { req, res } = c;
 				req.raw.route = `${c.var.route ?? ''}${subpath}`;
+
 				if (options.query) {
 					const validatorFn = options.query;
 					if (typeof options.query === 'function' && !validatorFn(req.query())) {
